@@ -12,7 +12,7 @@ autocar/
 ├── index.html        Home: alerta de golpe, hero, estoque, sobre, contato
 ├── carro.html        Página de detalhe do veículo (galeria de fotos)
 ├── admin.html        Painel do operador (login + cadastro/edição)
-├── css/estilo.css    Estilo (cor de marca #b84a39)
+├── css/estilo.css    Estilo (cores da logo: azul #1a385a, vermelho #a52521)
 ├── js/
 │   ├── config.js     >>> VOCÊ PREENCHE aqui as chaves e dados da loja <<<
 │   ├── site.js        Carrega os carros na home
