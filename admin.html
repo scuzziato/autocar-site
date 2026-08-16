@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel de Estoque | AutoCar</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body style="background:var(--cinza-cl)">
+
+<!-- LOGIN -->
+<div id="tela-login">
+  <div class="login-box">
+    <h2 style="margin-bottom:6px;color:var(--marca)">AutoCar</h2>
+    <p style="color:var(--cinza);margin-bottom:20px;font-size:.9rem">Painel de estoque</p>
+    <div id="msg-login"></div>
+    <div class="campo">
+      <label>E-mail</label>
+      <input type="email" id="in-email" autocomplete="username">
+    </div>
+    <div class="campo">
+      <label>Senha</label>
+      <input type="password" id="in-senha" autocomplete="current-password">
+    </div>
+    <button class="btn-p" id="btn-login" style="width:100%">Entrar</button>
+  </div>
+</div>
+
+<!-- PAINEL -->
+<div id="tela-painel" class="admin-wrap oculto">
+  <div class="topo-admin">
+    <div style="display:flex;align-items:center;gap:14px">
+      <img src="img/logo.png" alt="AutoCar" style="height:46px">
+      <div>
+        <h2 style="color:var(--marca)">Estoque</h2>
+        <p style="color:var(--cinza);font-size:.88rem" id="quem"></p>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <a class="btn-s" href="index.html" target="_blank">Ver site ↗</a>
+      <button class="btn-s" id="btn-sair">Sair</button>
+    </div>
+  </div>
+
+  <div id="msg-painel"></div>
+
+  <!-- Botão novo -->
+  <button class="btn-p" id="btn-novo" style="margin-bottom:20px">+ Adicionar veículo</button>
+
+  <!-- Formulário (oculto até clicar) -->
+  <div id="form-box" class="oculto" style="background:#fff;border:1px solid var(--borda);border-radius:14px;padding:24px;margin-bottom:28px">
+    <h3 id="form-tit" style="margin-bottom:18px">Novo veículo</h3>
+    <input type="hidden" id="f-id">
+
+    <div class="campo">
+      <label>Título *</label>
+      <input id="f-titulo" placeholder="Ex: Fiat Toro Volcano 2021">
+    </div>
+
+    <div class="grid2">
+      <div class="campo">
+        <label>Categoria *</label>
+        <select id="f-categoria"></select>
+      </div>
+      <div class="campo">
+        <label>Preço (R$) — deixe vazio para "Consulte"</label>
+        <input id="f-preco" type="number" step="100" placeholder="89900">
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="campo"><label>Marca</label><input id="f-marca"></div>
+      <div class="campo"><label>Modelo</label><input id="f-modelo"></div>
+    </div>
+
+    <div class="grid3">
+      <div class="campo"><label>Ano fabricação</label><input id="f-anofab" type="number" placeholder="2021"></div>
+      <div class="campo"><label>Ano modelo</label><input id="f-anomod" type="number" placeholder="2022"></div>
+      <div class="campo"><label>KM</label><input id="f-km" type="number" placeholder="45000"></div>
+    </div>
+
+    <div class="grid3">
+      <div class="campo">
+        <label>Câmbio</label>
+        <select id="f-cambio">
+          <option value="">—</option><option>Manual</option><option>Automático</option>
+          <option>Automatizado</option><option>CVT</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Combustível</label>
+        <select id="f-comb">
+          <option value="">—</option><option>Flex</option><option>Gasolina</option>
+          <option>Diesel</option><option>Etanol</option><option>Elétrico</option><option>Híbrido</option>
+        </select>
+      </div>
+      <div class="campo"><label>Portas</label><input id="f-portas" type="number" placeholder="4"></div>
+    </div>
+
+    <div class="grid2">
+      <div class="campo"><label>Cor</label><input id="f-cor"></div>
+      <div class="campo">
+        <label>Opcionais (separe por vírgula)</label>
+        <input id="f-opcionais" placeholder="Ar, Direção hidráulica, Vidros elétricos">
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Descrição livre</label>
+      <textarea id="f-descricao" placeholder="Estado geral, único dono, revisões em dia..."></textarea>
+    </div>
+
+    <div class="grid3">
+      <div class="campo" style="display:flex;align-items:center;gap:8px;margin-top:24px">
+        <input type="checkbox" id="f-destaque" style="width:auto"><label style="margin:0" title="Aparece no carrossel da página inicial">Destaque (carrossel)</label>
+      </div>
+      <div class="campo" style="display:flex;align-items:center;gap:8px;margin-top:24px">
+        <input type="checkbox" id="f-vendido" style="width:auto"><label style="margin:0">Vendido</label>
+      </div>
+      <div class="campo" style="display:flex;align-items:center;gap:8px;margin-top:24px">
+        <input type="checkbox" id="f-ativo" style="width:auto" checked><label style="margin:0">Visível no site</label>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Fotos (a 1ª será a capa) — pode selecionar várias</label>
+      <input type="file" id="f-fotos" accept="image/*" multiple>
+      <div class="thumbs-up" id="thumbs-up"></div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:18px">
+      <button class="btn-p" id="btn-salvar">Salvar veículo</button>
+      <button class="btn-s" id="btn-cancelar">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Lista de carros -->
+  <h3 style="margin-bottom:14px">Veículos cadastrados (<span id="cont">0</span>)</h3>
+  <div id="lista"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

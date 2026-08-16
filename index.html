@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AutoCar Veículos | Seminovos e Utilitários em Toledo - PR</title>
+<meta name="description" content="AutoCar Veículos em Toledo/PR: seminovos, utilitários, vans, pickups, caminhões e motos com procedência. Rua São João, 6237 - Centro. (45) 99113-0102.">
+<meta name="keywords" content="seminovos toledo, carros usados toledo pr, utilitários toledo, vans toledo, autocar veículos, pickups toledo, revenda de veículos toledo">
+<meta name="robots" content="all">
+<meta name="theme-color" content="#b84a39">
+<!-- Open Graph -->
+<meta property="og:title" content="AutoCar Veículos | Seminovos em Toledo - PR">
+<meta property="og:description" content="Utilitários, vans, pickups, caminhões e motos com procedência em Toledo/PR.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+
+<!-- Faixa de alerta de golpe (ativo de confiança em destaque) -->
+<div class="alerta-golpe">
+  ⚠️ <strong>Atenção:</strong> golpistas usam o nome da AutoCar em anúncios falsos.
+  Negocie <strong>somente</strong> pelos nossos canais oficiais.
+  <a href="#contato">Saiba mais</a>
+</div>
+
+<header class="topo">
+  <div class="topo-in">
+    <a href="index.html" class="logo"><img src="img/logo.png" alt="AutoCar Veículos"></a>
+    <nav class="menu">
+      <a href="#estoque">Estoque</a>
+      <a href="#sobre">A Loja</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a class="btn-zap" id="zap-topo" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <h1>Seminovos com procedência<br>em Toledo - PR</h1>
+        <p>Utilitários, vans, pickups, caminhões, veículos de passeio e motos.
+           Cada veículo avaliado antes de entrar no nosso estoque — você conhece
+           toda a procedência antes de fechar negócio.</p>
+        <div class="hero-cta">
+          <a href="#estoque" class="btn">Ver estoque</a>
+          <a class="btn sec" id="zap-hero" target="_blank" rel="noopener">Falar no WhatsApp</a>
+        </div>
+      </div>
+
+      <!-- Carrossel de destaques (6 a 10 veículos marcados como destaque) -->
+      <div class="carrossel" id="carrossel">
+        <div class="carrossel-vazio" id="carrossel-vazio">Carregando destaques…</div>
+        <div class="carrossel-trilho" id="carrossel-trilho"></div>
+        <button class="carrossel-seta esq oculto" id="cr-esq" aria-label="Anterior">‹</button>
+        <button class="carrossel-seta dir oculto" id="cr-dir" aria-label="Próximo">›</button>
+        <div class="carrossel-dots" id="carrossel-dots"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ESTOQUE -->
+<section id="estoque">
+  <div class="container">
+    <h2 class="sec-tit">Nosso estoque</h2>
+    <p class="sec-sub">Filtre por categoria. Clique no veículo para ver fotos e ficha completa.</p>
+    <div class="chips" id="chips"></div>
+    <div class="grade" id="grade"></div>
+    <div class="vazio oculto" id="vazio">Nenhum veículo nesta categoria no momento.
+      Fale conosco no WhatsApp para novidades.</div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre" class="sobre">
+  <div class="container">
+    <div class="sobre-grid">
+      <div>
+        <h2 class="sec-tit">A AutoCar Veículos</h2>
+        <p class="sec-sub">Tradição e transparência no mercado de Toledo/PR.</p>
+        <p>Somos especializados em utilitários, vans, pickups, caminhões, veículos
+           de passeio e motos. Trabalhamos com transparência total em cada negociação,
+           atendendo pessoalmente na loja e pelos nossos canais oficiais.</p>
+      </div>
+      <div>
+        <ul>
+          <li><b>✓</b> <div><b>Procedência garantida</b> — todo veículo é avaliado antes de entrar no estoque.</div></li>
+          <li><b>✓</b> <div><b>Atendimento direto</b> — negocie pessoalmente na loja ou pelo WhatsApp oficial.</div></li>
+          <li><b>✓</b> <div><b>Variedade</b> — de utilitários e vans a pickups, caminhões e motos.</div></li>
+          <li><b>✓</b> <div><b>Localização</b> — Rua São João, 6237, Centro de Toledo.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO / GOLPE -->
+<section id="contato">
+  <div class="container">
+    <h2 class="sec-tit">Contato</h2>
+    <p class="sec-sub" id="loja-end"></p>
+    <div class="sobre-grid">
+      <div>
+        <p><b>Telefone/WhatsApp:</b> <span id="loja-tel"></span></p>
+        <p><b>Fixo:</b> <span id="loja-fixo"></span></p>
+        <p><b>E-mail:</b> <span id="loja-email"></span></p>
+        <p><b>Horário:</b> <span id="loja-hora"></span></p>
+        <p style="margin-top:16px">
+          <a class="btn-zap" id="zap-contato" target="_blank" rel="noopener" style="display:inline-flex">Falar no WhatsApp</a>
+        </p>
+      </div>
+      <div>
+        <div style="background:#fff4e6;border:1px solid #f0d9b8;border-radius:14px;padding:20px">
+          <h4 style="color:#7a2e00;margin-bottom:10px">⚠️ Atenção para o golpe</h4>
+          <p style="font-size:.92rem;color:#8a4b00">Estelionatários usam os dados da AutoCar
+             (endereço e telefone) em anúncios falsos na OLX e redes sociais. Já registramos
+             Boletins de Ocorrência na Polícia Civil do Paraná. <b>Procure sempre diretamente
+             a loja pelos canais oficiais acima.</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <img src="img/logo.png" alt="AutoCar Veículos" style="height:60px;margin-bottom:12px;filter:brightness(0) invert(1);opacity:.9">
+        <p style="font-size:.9rem" id="foot-end"></p>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <p style="font-size:.9rem" id="foot-tel"></p>
+        <p style="font-size:.9rem" id="foot-email"></p>
+      </div>
+      <div>
+        <h4>Horário</h4>
+        <p style="font-size:.9rem" id="foot-hora"></p>
+      </div>
+    </div>
+    <div class="foot-linha">© 2026 AutoCar Veículos — Todos os direitos reservados.</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/site.js"></script>
+</body>
+</html>
