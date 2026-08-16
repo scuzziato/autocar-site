@@ -22,9 +22,14 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   color:var(--tinta);background:var(--branco);line-height:1.55;
 }
+/* Títulos com fonte condensada automotiva */
+h1,h2,h3,h4,.logo,.card-tit,.slide-tit,.sec-tit,.side-tit,.chip{
+  font-family:"Oswald",system-ui,"Arial Narrow",sans-serif;
+}
+h1,h2,.sec-tit,.slide-tit{text-transform:uppercase;letter-spacing:.5px}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 .container{max-width:var(--larg);margin:0 auto;padding:0 20px}
@@ -43,9 +48,10 @@ header.topo{
   border-bottom:1px solid var(--borda);
 }
 .topo-in{display:flex;align-items:center;justify-content:space-between;
-  padding:12px 20px;max-width:var(--larg);margin:0 auto;gap:16px}
-.logo{font-weight:800;font-size:1.35rem;color:var(--marca);letter-spacing:-.5px;display:flex;align-items:center}
-.logo img{height:52px;width:auto;display:block}
+  padding:14px 20px;max-width:var(--larg);margin:0 auto;gap:16px}
+.logo{display:flex;align-items:center}
+.logo img{height:92px;width:auto;display:block}
+@media(max-width:640px){.logo img{height:64px}}
 .logo span{color:var(--tinta)}
 nav.menu{display:flex;gap:6px;flex-wrap:wrap}
 nav.menu a{padding:8px 12px;border-radius:8px;font-size:.92rem;color:var(--cinza);font-weight:500}
@@ -56,27 +62,27 @@ nav.menu a:hover,nav.menu a.ativo{background:var(--cinza-cl);color:var(--tinta)}
 }
 .btn-zap:hover{filter:brightness(.95)}
 
-/* ---------- Hero ---------- */
+/* ---------- Hero (área azul reduzida) ---------- */
 .hero{
   position:relative;
   background:linear-gradient(160deg,var(--marca),var(--marca-esc));
-  color:#fff;padding:52px 0 0;
+  color:#fff;padding:30px 0 0;
   overflow:hidden;
 }
 /* Logomarca como marca d'água ao fundo */
 .hero::before{
   content:"";position:absolute;inset:0;
-  background:url("../img/logo.png") center 40% no-repeat;
-  background-size:min(620px,80%);
+  background:url("../img/logo.png") center 45% no-repeat;
+  background-size:min(480px,70%);
   opacity:.07;
-  filter:brightness(0) invert(1);   /* deixa a logo branca */
+  filter:brightness(0) invert(1);
   pointer-events:none;z-index:0;
 }
 .hero .container{position:relative;z-index:1}
 .carrossel-faixa{position:relative;z-index:1}
-.hero-texto{text-align:center;max-width:760px;margin:0 auto;padding-bottom:8px}
-.hero h1{font-size:2.7rem;line-height:1.08;margin-bottom:16px;letter-spacing:-1px}
-.hero p{font-size:1.12rem;opacity:.95;margin:0 auto 26px;max-width:620px}
+.hero-texto{text-align:center;max-width:720px;margin:0 auto;padding-bottom:4px}
+.hero h1{font-size:2.2rem;line-height:1.05;margin-bottom:10px}
+.hero p{font-size:1rem;opacity:.95;margin:0 auto 18px;max-width:600px}
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .hero .btn{
   background:var(--vermelho);color:#fff;padding:13px 26px;border-radius:12px;
@@ -87,14 +93,14 @@ nav.menu a:hover,nav.menu a.ativo{background:var(--cinza-cl);color:var(--tinta)}
 .hero .btn.sec:hover{background:rgba(255,255,255,.12)}
 @media(max-width:640px){.hero h1{font-size:2rem}}
 
-/* ---------- Carrossel de destaques (faixa larga) ---------- */
-.carrossel-faixa{margin-top:32px;padding-bottom:40px}
-.carrossel{position:relative;border-radius:16px;overflow:hidden;max-width:840px;margin:0 auto;
-  background:rgba(0,0,0,.2);box-shadow:0 16px 44px rgba(0,0,0,.35)}
+/* ---------- Carrossel de destaques (menor) ---------- */
+.carrossel-faixa{margin-top:22px;padding-bottom:32px}
+.carrossel{position:relative;border-radius:14px;overflow:hidden;max-width:720px;margin:0 auto;
+  background:rgba(0,0,0,.2);box-shadow:0 14px 40px rgba(0,0,0,.35)}
 .carrossel-trilho{display:flex;transition:transform .55s cubic-bezier(.4,0,.2,1)}
 .slide{min-width:100%;position:relative}
 .slide a{display:block}
-.slide-foto{aspect-ratio:16/8;background:#0d1c2e;overflow:hidden}
+.slide-foto{aspect-ratio:16/7;background:#0d1c2e;overflow:hidden}
 .slide-foto img{width:100%;height:100%;object-fit:cover}
 .slide-info{position:absolute;left:0;right:0;bottom:0;
   background:linear-gradient(transparent,rgba(10,20,35,.94));
@@ -128,22 +134,41 @@ nav.menu a:hover,nav.menu a.ativo{background:var(--cinza-cl);color:var(--tinta)}
 @media(max-width:640px){.carrossel-vazio{aspect-ratio:4/3}}
 
 /* ---------- Seções ---------- */
-section{padding:48px 0}
-.sec-tit{font-size:1.5rem;margin-bottom:6px;letter-spacing:-.5px}
-.sec-sub{color:var(--cinza);margin-bottom:28px}
+section{padding:44px 0}
+.sec-tit{font-size:1.7rem;margin-bottom:6px}
+.sec-sub{color:var(--cinza);margin-bottom:24px}
 
-/* ---------- Filtro de categorias ---------- */
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
-.chip{
-  padding:8px 16px;border:1px solid var(--borda);border-radius:999px;
-  background:#fff;font-size:.9rem;cursor:pointer;font-weight:500;color:var(--cinza);
-  transition:.15s
+/* ---------- Layout do estoque: sidebar + grade ---------- */
+.estoque-layout{display:grid;grid-template-columns:250px 1fr;gap:28px;align-items:start}
+@media(max-width:820px){.estoque-layout{grid-template-columns:1fr}}
+
+.estoque-side{
+  position:sticky;top:96px;
+  border:1px solid var(--borda);border-radius:var(--raio);
+  padding:18px;background:#fff;box-shadow:var(--sombra)
 }
-.chip:hover{border-color:var(--marca);color:var(--marca)}
-.chip.on{background:var(--marca);color:#fff;border-color:var(--marca)}
+@media(max-width:820px){.estoque-side{position:static}}
+.side-tit{font-size:.85rem;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--marca);margin-bottom:12px;font-weight:600}
+.side-cats{display:flex;flex-direction:column;gap:4px;margin-bottom:22px}
+.chip{
+  text-align:left;padding:9px 14px;border:none;border-left:3px solid transparent;
+  border-radius:8px;background:transparent;font-size:.95rem;cursor:pointer;
+  color:var(--tinta);transition:.15s;width:100%
+}
+.chip:hover{background:var(--cinza-cl)}
+.chip.on{background:var(--marca);color:#fff;border-left-color:var(--vermelho);font-weight:600}
+
+.side-busca{border-top:1px solid var(--borda);padding-top:18px}
+.side-busca input,.side-busca select{
+  width:100%;padding:10px 12px;border:1px solid var(--borda);border-radius:9px;
+  font-size:.92rem;font-family:inherit;margin-bottom:12px;background:#fff
+}
+.side-busca input:focus,.side-busca select:focus{outline:2px solid var(--marca);border-color:var(--marca)}
+.side-label{display:block;font-size:.8rem;color:var(--cinza);margin-bottom:5px;font-weight:500}
 
 /* ---------- Grade de carros ---------- */
-.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:22px}
+.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
 .card{
   border:1px solid var(--borda);border-radius:var(--raio);overflow:hidden;
   background:#fff;box-shadow:var(--sombra);transition:.18s;display:flex;flex-direction:column

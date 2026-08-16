@@ -17,11 +17,10 @@ function preencheLoja(){
   const set = (id,val)=>{const e=document.getElementById(id); if(e) e.textContent=val;};
   set("loja-end", L.endereco);
   set("loja-tel", L.tel_exib);
-  set("loja-fixo", L.fixo);
   set("loja-email", L.email);
   set("loja-hora", L.horario);
   set("foot-end", L.endereco);
-  set("foot-tel", L.tel_exib+" / "+L.fixo);
+  set("foot-tel", L.tel_exib);
   set("foot-email", L.email);
   set("foot-hora", L.horario);
   ["zap-topo","zap-hero","zap-contato"].forEach(id=>{
@@ -32,6 +31,8 @@ function preencheLoja(){
 // Estado --------------------------------------------------
 let TODOS = [];
 let filtro = "Todos";
+let busca = "";
+let ordem = "recentes";
 
 // Filtro de categorias ------------------------------------
 function montaChips(){
@@ -73,14 +74,49 @@ function cardHTML(c){
 function render(){
   const grade = document.getElementById("grade");
   const vazio = document.getElementById("vazio");
-  const lista = filtro==="Todos" ? TODOS : TODOS.filter(c=>c.categoria===filtro);
+
+  // 1) filtro por categoria
+  let lista = filtro==="Todos" ? TODOS.slice() : TODOS.filter(c=>c.categoria===filtro);
+
+  // 2) busca por texto (título, marca, modelo)
+  if(busca.trim()){
+    const q = busca.trim().toLowerCase();
+    lista = lista.filter(c=>{
+      const alvo = [c.titulo, c.marca, c.modelo].filter(Boolean).join(" ").toLowerCase();
+      return alvo.includes(q);
+    });
+  }
+
   if(lista.length===0){
     grade.innerHTML=""; vazio.classList.remove("oculto"); return;
   }
   vazio.classList.add("oculto");
-  // Não vendidos primeiro
-  lista.sort((a,b)=> (a.vendido-b.vendido) || (b.destaque-a.destaque));
+
+  // 3) ordenação
+  const preco = v => v==null ? Infinity : v;   // "consulte" vai pro fim em asc
+  const ano   = c => c.ano_mod || c.ano_fab || 0;
+  lista.sort((a,b)=>{
+    if(a.vendido !== b.vendido) return a.vendido - b.vendido; // vendidos por último
+    switch(ordem){
+      case "preco-asc":  return preco(a.preco) - preco(b.preco);
+      case "preco-desc": return (b.preco||0) - (a.preco||0);
+      case "ano-desc":   return ano(b) - ano(a);
+      case "ano-asc":    return ano(a) - ano(b);
+      default:
+        return (b.destaque-a.destaque) ||
+               (new Date(b.criado_em) - new Date(a.criado_em));
+    }
+  });
+
   grade.innerHTML = lista.map(cardHTML).join("");
+}
+
+// Liga os controles da busca/ordenação --------------------
+function ligaControles(){
+  const txt = document.getElementById("busca-txt");
+  const ord = document.getElementById("ordena");
+  if(txt) txt.addEventListener("input", e=>{ busca = e.target.value; render(); });
+  if(ord) ord.addEventListener("change", e=>{ ordem = e.target.value; render(); });
 }
 
 // ===== Carrossel de destaques =====
@@ -170,4 +206,5 @@ async function carrega(){
 // Init ----------------------------------------------------
 preencheLoja();
 montaChips();
+ligaControles();
 carrega();
