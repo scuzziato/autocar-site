@@ -203,19 +203,6 @@ async function carrega(){
   montaCarrossel(destaques);
 }
 
-// ===== Menu sanduíche (celular) =====
-(function(){
-  const btn = document.getElementById("menu-toggle");
-  const nav = document.getElementById("menu-nav");
-  if(btn && nav){
-    btn.addEventListener("click", ()=> nav.classList.toggle("aberto"));
-    // fecha ao clicar num link
-    nav.querySelectorAll("a").forEach(a=>{
-      a.addEventListener("click", ()=> nav.classList.remove("aberto"));
-    });
-  }
-})();
-
 // Init ----------------------------------------------------
 preencheLoja();
 montaChips();
