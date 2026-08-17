@@ -45,7 +45,7 @@ async function carrega(){
       </div>`:""}
     </div>
     <div>
-      <span class="card-cat">${c.categoria}</span>
+      <span class="card-cat">${(c.categorias&&c.categorias.length)?c.categorias.join(" · "):""}</span>
       <h1 style="font-size:1.6rem;margin:6px 0">${c.titulo}</h1>
       ${c.vendido?`<span class="tag-vendido" style="position:static;display:inline-block">Vendido</span>`:""}
       <div class="det-preco">${brl(c.preco)}</div>

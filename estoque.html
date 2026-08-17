@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estoque | AutoCar Veículos - Toledo/PR</title>
+<meta name="description" content="Confira o estoque completo da AutoCar Veículos: vans, micro-ônibus, furgões e utilitários em Toledo/PR.">
+<meta name="theme-color" content="#1a385a">
+<link rel="icon" href="img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+
+<header class="topo">
+  <div class="topo-in">
+    <a href="index.html" class="logo"><img src="img/logo.png" alt="AutoCar Veículos"></a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">☰</button>
+    <nav class="menu" id="menu-nav">
+      <a href="estoque.html">Estoque</a>
+      <a href="index.html#sobre">A Loja</a>
+      <a href="index.html#contato">Contato</a>
+    </nav>
+    <a class="btn-zap" id="zap-topo" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
+</header>
+
+<div class="estoque-page">
+  <div class="container topo-grid">
+
+    <!-- COLUNA ESQUERDA: filtros (fixa) -->
+    <aside class="estoque-side" id="filtros">
+      <h3 class="side-tit">Categorias</h3>
+      <div class="side-cats" id="chips"></div>
+      <div class="side-busca">
+        <h3 class="side-tit">Buscar no estoque</h3>
+        <input type="text" id="busca-txt" placeholder="Marca ou modelo…" autocomplete="off">
+        <button class="btn-buscar" id="busca-btn">Buscar</button>
+        <label class="side-label" style="margin-top:14px">Ordenar por</label>
+        <select id="ordena">
+          <option value="recentes">Mais recentes</option>
+          <option value="preco-asc">Preço: menor primeiro</option>
+          <option value="preco-desc">Preço: maior primeiro</option>
+          <option value="ano-desc">Ano: mais novo</option>
+          <option value="ano-asc">Ano: mais antigo</option>
+        </select>
+      </div>
+    </aside>
+
+    <!-- COLUNA DIREITA: grade -->
+    <div class="estoque-conteudo">
+      <div class="estoque-cab">
+        <div>
+          <h1 class="sec-tit" id="estoque-titulo">Todos os veículos</h1>
+          <p class="sec-sub" id="estoque-cont">carregando…</p>
+        </div>
+        <a href="index.html" class="link-voltar">← Início</a>
+      </div>
+      <div class="grade" id="grade"></div>
+      <div class="vazio oculto" id="vazio">Nenhum veículo encontrado nesta busca.
+        Tente outra categoria ou fale conosco no WhatsApp.</div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <img src="img/logo.png" alt="AutoCar Veículos" style="height:60px;margin-bottom:12px;filter:brightness(0) invert(1);opacity:.9">
+        <p style="font-size:.9rem" id="foot-end"></p>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <p style="font-size:.9rem" id="foot-tel"></p>
+        <p style="font-size:.9rem" id="foot-email"></p>
+      </div>
+      <div>
+        <h4>Horário</h4>
+        <p style="font-size:.9rem" id="foot-hora"></p>
+      </div>
+    </div>
+    <div class="foot-linha">© 2026 AutoCar Veículos — Todos os direitos reservados.</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/comum.js"></script>
+<script src="js/estoque.js"></script>
+</body>
+</html>

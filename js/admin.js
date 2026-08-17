@@ -33,9 +33,19 @@ $("btn-login").onclick = async ()=>{
 };
 $("btn-sair").onclick = async ()=>{ await sb.auth.signOut(); mostraLogin(); };
 
-// ---------- CATEGORIAS ----------
+// ---------- CATEGORIAS (checkboxes) ----------
 function preencheCategorias(){
-  $("f-categoria").innerHTML = C.CATEGORIAS.map(c=>`<option>${c}</option>`).join("");
+  $("f-categorias").innerHTML = C.CATEGORIAS.map(c=>`
+    <label class="cat-check">
+      <input type="checkbox" value="${c}"> <span>${c}</span>
+    </label>`).join("");
+}
+function getCategoriasSelecionadas(){
+  return [...document.querySelectorAll("#f-categorias input:checked")].map(i=>i.value);
+}
+function setCategoriasSelecionadas(cats){
+  const set = new Set(cats||[]);
+  document.querySelectorAll("#f-categorias input").forEach(i=>{ i.checked = set.has(i.value); });
 }
 
 // ---------- LISTAR ----------
@@ -50,7 +60,7 @@ async function listar(){
       ${capa?`<img src="${capa}">`:`<div style="width:70px;height:52px;background:var(--cinza-cl);border-radius:7px"></div>`}
       <div class="meta">
         <b>${c.titulo}</b>
-        <small>${c.categoria} • ${preco}</small>
+        <small>${(c.categorias||[]).join(", ")||"—"} • ${preco}</small>
       </div>
       ${c.vendido?`<span class="badge v">Vendido</span>`:``}
       ${c.ativo?`<span class="badge a">No site</span>`:`<span class="badge v">Oculto</span>`}
@@ -67,7 +77,7 @@ $("btn-cancelar").onclick = ()=>{ $("form-box").classList.add("oculto"); };
 function limpaForm(){
   ["f-id","f-titulo","f-marca","f-modelo","f-preco","f-anofab","f-anomod","f-km","f-cor","f-portas","f-opcionais","f-descricao"]
     .forEach(id=>$(id).value="");
-  $("f-cambio").value=""; $("f-comb").value=""; $("f-categoria").selectedIndex=0;
+  $("f-cambio").value=""; $("f-comb").value=""; setCategoriasSelecionadas([]);
   $("f-destaque").checked=false; $("f-vendido").checked=false; $("f-ativo").checked=true;
   fotosAtuais=[]; renderThumbs(); $("f-fotos").value="";
 }
@@ -96,7 +106,7 @@ window.tiraFoto = (i)=>{ fotosAtuais.splice(i,1); renderThumbs(); };
 window.editar = async (id)=>{
   const { data:c } = await sb.from("carros").select("*").eq("id",id).single();
   if(!c) return;
-  $("f-id").value=c.id; $("f-titulo").value=c.titulo||""; $("f-categoria").value=c.categoria;
+  $("f-id").value=c.id; $("f-titulo").value=c.titulo||""; setCategoriasSelecionadas(c.categorias);
   $("f-marca").value=c.marca||""; $("f-modelo").value=c.modelo||"";
   $("f-preco").value=c.preco??""; $("f-anofab").value=c.ano_fab??""; $("f-anomod").value=c.ano_mod??"";
   $("f-km").value=c.km??""; $("f-cambio").value=c.cambio||""; $("f-comb").value=c.combustivel||"";
@@ -121,6 +131,7 @@ window.remover = async (id)=>{
 $("btn-salvar").onclick = async ()=>{
   const titulo = $("f-titulo").value.trim();
   if(!titulo){ msg($("msg-painel"),"Informe o título do veículo.","err"); scrollTo(0,0); return; }
+  if(getCategoriasSelecionadas().length===0){ msg($("msg-painel"),"Selecione ao menos uma categoria.","err"); scrollTo(0,0); return; }
 
   $("btn-salvar").disabled=true; $("btn-salvar").textContent="Salvando…";
   msg($("msg-painel"),"Enviando fotos e salvando…","ok");
@@ -143,7 +154,7 @@ $("btn-salvar").onclick = async ()=>{
     const opc = $("f-opcionais").value.split(",").map(s=>s.trim()).filter(Boolean);
     const reg = {
       titulo,
-      categoria: $("f-categoria").value,
+      categorias: getCategoriasSelecionadas(),
       marca: $("f-marca").value.trim()||null,
       modelo: $("f-modelo").value.trim()||null,
       preco: num("f-preco"),

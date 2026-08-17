@@ -8,16 +8,13 @@
 <meta name="keywords" content="utilitários toledo, vans toledo, micro-ônibus paraná, furgões toledo, maior estoque utilitários paraná, autocar veículos, vans paraná, furgão toledo pr">
 <meta name="robots" content="all">
 <meta name="theme-color" content="#1a385a">
-<!-- Open Graph -->
 <meta property="og:title" content="AutoCar Veículos | Maior Estoque de Utilitários do Paraná">
 <meta property="og:description" content="Vans, micro-ônibus e furgões com procedência em Toledo/PR.">
 <meta property="og:type" content="website">
-<!-- Favicon -->
 <link rel="icon" href="img/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16.png">
 <link rel="apple-touch-icon" href="img/favicon-180.png">
-<!-- Fonte condensada automotiva -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -28,8 +25,9 @@
 <header class="topo">
   <div class="topo-in">
     <a href="index.html" class="logo"><img src="img/logo.png" alt="AutoCar Veículos"></a>
-    <nav class="menu">
-      <a href="#estoque">Estoque</a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">☰</button>
+    <nav class="menu" id="menu-nav">
+      <a href="estoque.html">Estoque</a>
       <a href="#sobre">A Loja</a>
       <a href="#contato">Contato</a>
     </nav>
@@ -37,8 +35,8 @@
   </div>
 </header>
 
-<!-- HERO -->
-<div class="hero">
+<!-- HERO com carrossel de destaques -->
+<div class="hero hero-home">
   <div class="container">
     <div class="hero-texto">
       <h1>O maior estoque de utilitários do Paraná</h1>
@@ -46,15 +44,11 @@
          avaliado antes de entrar no nosso estoque — você conhece toda a
          procedência antes de fechar negócio, em Toledo/PR.</p>
       <div class="hero-cta">
-        <a href="#estoque" class="btn">Ver estoque</a>
+        <a href="estoque.html" class="btn">Ver estoque completo</a>
         <a class="btn sec" id="zap-hero" target="_blank" rel="noopener">Falar no WhatsApp</a>
       </div>
     </div>
-  </div>
-
-  <!-- Carrossel de destaques (largura total, em destaque) -->
-  <div class="carrossel-faixa">
-    <div class="container">
+    <div class="carrossel-faixa">
       <div class="carrossel" id="carrossel">
         <div class="carrossel-vazio" id="carrossel-vazio">Carregando destaques…</div>
         <div class="carrossel-trilho" id="carrossel-trilho"></div>
@@ -66,38 +60,12 @@
   </div>
 </div>
 
-<!-- ESTOQUE -->
-<section id="estoque">
+<!-- CATEGORIAS (levam ao estoque filtrado) -->
+<section id="categorias">
   <div class="container">
-    <div class="estoque-layout">
-      <!-- Coluna lateral esquerda (cartão que sobrepõe o azul) -->
-      <aside class="estoque-side">
-        <h3 class="side-tit">Categorias</h3>
-        <div class="side-cats" id="chips"></div>
-
-        <div class="side-busca">
-          <h3 class="side-tit">Buscar no estoque</h3>
-          <input type="text" id="busca-txt" placeholder="Marca ou modelo…" autocomplete="off">
-          <label class="side-label">Ordenar por</label>
-          <select id="ordena">
-            <option value="recentes">Mais recentes</option>
-            <option value="preco-asc">Preço: menor primeiro</option>
-            <option value="preco-desc">Preço: maior primeiro</option>
-            <option value="ano-desc">Ano: mais novo</option>
-            <option value="ano-asc">Ano: mais antigo</option>
-          </select>
-        </div>
-      </aside>
-
-      <!-- Grade de carros à direita -->
-      <div class="estoque-conteudo">
-        <h2 class="sec-tit">Nosso estoque</h2>
-        <p class="sec-sub">Escolha uma categoria, busque ou ordene. Clique no veículo para ver fotos e ficha completa.</p>
-        <div class="grade" id="grade"></div>
-        <div class="vazio oculto" id="vazio">Nenhum veículo encontrado.
-          Fale conosco no WhatsApp para novidades.</div>
-      </div>
-    </div>
+    <h2 class="sec-tit">Navegue por categoria</h2>
+    <p class="sec-sub">Escolha o tipo de veículo para ver todo o estoque disponível.</p>
+    <div class="cats-grid" id="cats-grid"></div>
   </div>
 </section>
 
@@ -175,6 +143,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
+<script src="js/comum.js"></script>
 <script src="js/site.js"></script>
 </body>
 </html>
