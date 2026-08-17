@@ -74,7 +74,13 @@ function montaDestaques(destaques){
     <div class="mini-carrossel" data-g="${gi}">
       <div class="mini-cab"><span class="mini-cab-nome">${cat}</span>
         <a class="mini-cab-link" href="${href}">ver todos</a></div>
-      <div class="mini-trilho">${lista.map(slideMini).join("")}</div>
+      <div class="mini-viewport">
+        <div class="mini-trilho">${lista.map(slideMini).join("")}</div>
+        ${lista.length>1?`
+          <button class="mini-seta esq" aria-label="Anterior">‹</button>
+          <button class="mini-seta dir" aria-label="Próximo">›</button>
+        `:""}
+      </div>
       ${lista.length>1?`<div class="mini-dots">${lista.map((_,i)=>`<button data-i="${i}" class="${i===0?"on":""}"></button>`).join("")}</div>`:""}
     </div>`;
   }).join("");
@@ -92,6 +98,11 @@ function montaDestaques(destaques){
       dots.forEach((d,di)=>d.classList.toggle("on", di===pos));
     };
     dots.forEach(d=> d.addEventListener("click", ()=>{ ir(+d.dataset.i); reinicia(); }));
+    // setas
+    const esq = car.querySelector(".mini-seta.esq");
+    const dir = car.querySelector(".mini-seta.dir");
+    if(esq) esq.addEventListener("click", (e)=>{ e.preventDefault(); ir(pos-1); reinicia(); });
+    if(dir) dir.addEventListener("click", (e)=>{ e.preventDefault(); ir(pos+1); reinicia(); });
     let timer;
     const inicia = ()=>{ timer = setInterval(()=>ir(pos+1), 4000); };
     const reinicia = ()=>{ clearInterval(timer); inicia(); };
