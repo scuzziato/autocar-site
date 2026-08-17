@@ -9,6 +9,41 @@ const msg = (box,txt,tipo)=>{ box.innerHTML = txt?`<div class="msg ${tipo}">${tx
 // Fotos em edição no formulário (mistura de URLs já salvas + novos arquivos)
 let fotosAtuais = [];   // {tipo:"url", valor:"https..."} ou {tipo:"file", valor:File, preview:"blob..."}
 
+// ---------- Compressão de imagem antes do upload ----------
+// Redimensiona para no máx. LARGURA_MAX px de largura e recomprime em JPEG.
+// Uma foto de 5MB do celular vira ~300-500KB, sem perda visível na tela.
+const LARGURA_MAX = 1600;   // px — suficiente para telas grandes
+const QUALIDADE   = 0.82;   // 0..1 — equilíbrio qualidade/tamanho
+
+function comprimeImagem(file){
+  return new Promise((resolve)=>{
+    // Se não for imagem, devolve como está
+    if(!file.type.startsWith("image/")){ resolve(file); return; }
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = ()=>{
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      if(width > LARGURA_MAX){
+        height = Math.round(height * (LARGURA_MAX / width));
+        width  = LARGURA_MAX;
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob((blob)=>{
+        if(!blob){ resolve(file); return; }   // fallback
+        // Mantém nome base, troca extensão para .jpg
+        const base = (file.name.replace(/\.[^.]+$/,"")||"foto");
+        resolve(new File([blob], base+".jpg", {type:"image/jpeg"}));
+      }, "image/jpeg", QUALIDADE);
+    };
+    img.onerror = ()=>{ URL.revokeObjectURL(url); resolve(file); };
+    img.src = url;
+  });
+}
+
 // ---------- AUTH ----------
 async function estado(){
   const { data:{ session } } = await sb.auth.getSession();
@@ -137,13 +172,13 @@ $("btn-salvar").onclick = async ()=>{
   msg($("msg-painel"),"Enviando fotos e salvando…","ok");
 
   try{
-    // 1) Sobe fotos novas ao storage, mantém URLs existentes
+    // 1) Sobe fotos novas ao storage (comprimidas), mantém URLs existentes
     const urls = [];
     for(const f of fotosAtuais){
       if(f.tipo==="url"){ urls.push(f.valor); continue; }
-      const ext = (f.valor.name.split(".").pop()||"jpg").toLowerCase();
-      const nome = `${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
-      const { error:upErr } = await sb.storage.from(BUCKET).upload(nome, f.valor, {cacheControl:"3600"});
+      const arquivo = await comprimeImagem(f.valor);   // <-- comprime aqui
+      const nome = `${Date.now()}-${Math.random().toString(36).slice(2,8)}.jpg`;
+      const { error:upErr } = await sb.storage.from(BUCKET).upload(nome, arquivo, {cacheControl:"3600", contentType:"image/jpeg"});
       if(upErr) throw upErr;
       const { data:pub } = sb.storage.from(BUCKET).getPublicUrl(nome);
       urls.push(pub.publicUrl);
