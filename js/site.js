@@ -1,86 +1,78 @@
-/* ===== Home: destaques + categorias ===== */
-// (helpers em comum.js: sb, brl, km, zapURL, preencheLoja, ligaMenu, catPrincipal)
+/* ===== Home: barra de categorias + grade de carrosséis de destaque ===== */
+// (helpers em comum.js: sb, brl, km, zapURL, preencheLoja, ligaMenu)
 
-// ===== Carrossel de destaques =====
-let crIndex = 0, crTotal = 0, crTimer = null;
-
-function montaCarrossel(destaques){
-  const trilho = document.getElementById("carrossel-trilho");
-  const vazio  = document.getElementById("carrossel-vazio");
-  const dots   = document.getElementById("carrossel-dots");
-  const esq = document.getElementById("cr-esq"), dir = document.getElementById("cr-dir");
-
-  destaques = destaques.slice(0, 10);
-  crTotal = destaques.length;
-
-  if(crTotal === 0){ vazio.textContent = "Em breve, veículos em destaque."; return; }
-  vazio.classList.add("oculto");
-
-  trilho.innerHTML = destaques.map(c=>{
-    const capa = c.foto_capa || (c.fotos&&c.fotos[0]) || "";
-    const sub = [ (c.ano_fab||"")+(c.ano_mod?"/"+c.ano_mod:""), c.km!=null?km(c.km):"" ]
-                .filter(Boolean).join("  •  ");
-    return `<div class="slide">
-      <a href="carro.html?id=${c.id}">
-        <div class="slide-foto">
-          ${capa?`<img src="${capa}" alt="${c.titulo}">`:""}
-          ${c.vendido?`<span class="tag-vendido">Vendido</span>`:""}
-        </div>
-        <div class="slide-info">
-          <span class="slide-badge">Destaque</span>
-          <div class="slide-tit">${c.titulo}</div>
-          ${sub?`<div class="slide-sub">${sub}</div>`:""}
-          <div class="slide-preco">${brl(c.preco)}</div>
-        </div>
-      </a>
-    </div>`;
-  }).join("");
-
-  dots.innerHTML = destaques.map((_,i)=>`<button data-i="${i}" class="${i===0?"on":""}"></button>`).join("");
-  dots.querySelectorAll("button").forEach(b=>{
-    b.onclick = ()=>{ vaiPara(+b.dataset.i); reinicia(); };
-  });
-
-  if(crTotal>1){
-    esq.classList.remove("oculto"); dir.classList.remove("oculto");
-    esq.onclick = ()=>{ vaiPara(crIndex-1); reinicia(); };
-    dir.onclick = ()=>{ vaiPara(crIndex+1); reinicia(); };
-    inicia();
-  }
-  vaiPara(0);
-}
-function vaiPara(i){
-  if(crTotal===0) return;
-  crIndex = (i+crTotal)%crTotal;
-  document.getElementById("carrossel-trilho").style.transform = `translateX(-${crIndex*100}%)`;
-  document.querySelectorAll("#carrossel-dots button")
-    .forEach((b,idx)=>b.classList.toggle("on", idx===crIndex));
-}
-function inicia(){ crTimer = setInterval(()=>vaiPara(crIndex+1), 5000); }
-function reinicia(){ clearInterval(crTimer); if(crTotal>1) inicia(); }
-
-// ===== Categorias na sidebar (links que levam ao estoque) =====
-function montaCategorias(){
-  const box = document.getElementById("cats-links");
+// ===== Barra de categorias (topo) =====
+function montaBarraCategorias(){
+  const box = document.getElementById("cat-bar");
   if(!box) return;
-  const links = ["Todos", ...C.CATEGORIAS];
-  box.innerHTML = links.map(cat=>{
+  const cats = ["Todos", ...C.CATEGORIAS];
+  box.innerHTML = cats.map(cat=>{
     const href = cat==="Todos" ? "estoque.html" : `estoque.html?cat=${encodeURIComponent(cat)}`;
-    return `<a class="chip" href="${href}">${cat}</a>`;
+    return `<a class="cat-bar-item" href="${href}">${cat}</a>`;
   }).join("");
 }
 
-// ===== Busca na home leva ao estoque com o termo =====
-function ligaBusca(){
-  const txt = document.getElementById("busca-txt");
-  const btn = document.getElementById("busca-btn");
-  if(!btn) return;
-  const irParaEstoque = ()=>{
-    const q = txt ? txt.value.trim() : "";
-    location.href = q ? `estoque.html?q=${encodeURIComponent(q)}` : "estoque.html";
-  };
-  btn.addEventListener("click", irParaEstoque);
-  if(txt) txt.addEventListener("keydown", e=>{ if(e.key==="Enter") irParaEstoque(); });
+// ===== Card de um slide dentro do mini-carrossel =====
+function slideMini(c){
+  const capa = c.foto_capa || (c.fotos&&c.fotos[0]) || "";
+  const sub = [ (c.ano_fab||"")+(c.ano_mod?"/"+c.ano_mod:""), c.km!=null?km(c.km):"" ]
+              .filter(Boolean).join("  •  ");
+  const cat = (c.categorias&&c.categorias.length)?c.categorias[0]:"";
+  return `<a class="mini-slide" href="carro.html?id=${c.id}">
+    <div class="mini-foto">
+      ${capa?`<img src="${capa}" alt="${c.titulo}">`:""}
+      ${c.vendido?`<span class="tag-vendido">Vendido</span>`:`<span class="mini-badge">Destaque</span>`}
+    </div>
+    <div class="mini-info">
+      ${cat?`<span class="mini-cat">${cat}</span>`:""}
+      <span class="mini-tit">${c.titulo}</span>
+      ${sub?`<span class="mini-sub">${sub}</span>`:""}
+      <span class="mini-preco">${brl(c.preco)}</span>
+    </div>
+  </a>`;
+}
+
+// ===== Monta 3 carrosséis, distribuindo os destaques entre eles =====
+function montaDestaques(destaques){
+  const grid  = document.getElementById("destaques-grid");
+  const vazio = document.getElementById("destaques-vazio");
+
+  if(!destaques.length){
+    if(vazio) vazio.textContent = "Em breve, veículos em destaque.";
+    return;
+  }
+  if(vazio) vazio.remove();
+
+  // Distribui os destaques em até 3 grupos (colunas)
+  const NCOLS = Math.min(3, destaques.length);
+  const grupos = Array.from({length:NCOLS}, ()=>[]);
+  destaques.forEach((c,i)=> grupos[i % NCOLS].push(c));
+
+  grid.innerHTML = grupos.map((g,gi)=>`
+    <div class="mini-carrossel" data-g="${gi}">
+      <div class="mini-trilho">${g.map(slideMini).join("")}</div>
+      ${g.length>1?`<div class="mini-dots">${g.map((_,i)=>`<button data-i="${i}" class="${i===0?"on":""}"></button>`).join("")}</div>`:""}
+    </div>`).join("");
+
+  // Ativa rotação independente de cada coluna
+  grid.querySelectorAll(".mini-carrossel").forEach((car,idx)=>{
+    const trilho = car.querySelector(".mini-trilho");
+    const dots = car.querySelectorAll(".mini-dots button");
+    const total = grupos[idx].length;
+    if(total<2) return;
+    let pos = 0;
+    const ir = (i)=>{
+      pos = (i+total)%total;
+      trilho.style.transform = `translateX(-${pos*100}%)`;
+      dots.forEach((d,di)=>d.classList.toggle("on", di===pos));
+    };
+    dots.forEach(d=> d.addEventListener("click", ()=>{ ir(+d.dataset.i); reinicia(); }));
+    let timer;
+    // desencontra o início de cada coluna para não trocarem todas juntas
+    const inicia = ()=>{ timer = setInterval(()=>ir(pos+1), 4000); };
+    const reinicia = ()=>{ clearInterval(timer); inicia(); };
+    setTimeout(inicia, idx*1300);
+  });
 }
 
 // ===== Carrega destaques do Supabase =====
@@ -90,16 +82,15 @@ async function carrega(){
     .eq("ativo", true).eq("destaque", true)
     .order("criado_em",{ascending:false});
   if(error){ console.error(error);
-    const v=document.getElementById("carrossel-vazio");
+    const v=document.getElementById("destaques-vazio");
     if(v) v.textContent="Não foi possível carregar os destaques.";
     return; }
   const destaques = (data||[]).filter(c=>!c.vendido);
-  montaCarrossel(destaques);
+  montaDestaques(destaques);
 }
 
 // Init
 preencheLoja();
 ligaMenu();
-montaCategorias();
-ligaBusca();
+montaBarraCategorias();
 carrega();

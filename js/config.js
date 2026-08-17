@@ -22,6 +22,6 @@ window.CONFIG = {
   },
 
   // Categorias (ordem que aparecem no filtro)
-  CATEGORIAS: ["Utilitários","Vans","Vans Passageiros","Vans Furgões",
-               "Pickups","Passeios","Motos","Mista","Caminhão"]
+  CATEGORIAS: ["Vans Passageiros","Vans Furgões","Pickups","Carros de Passeios",
+               "Motos","Mista","Caminhão","Repasse"]
 };

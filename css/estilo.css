@@ -44,7 +44,7 @@ img{max-width:100%;display:block}
 
 /* ---------- Cabeçalho ---------- */
 header.topo{
-  position:sticky;top:0;z-index:50;
+  position:relative;z-index:50;
   background:#eef1f5;
   border-bottom:1px solid #dce0e6;
   box-shadow:0 1px 8px rgba(0,0,0,.04);
@@ -148,13 +148,12 @@ section{padding:44px 0}
 /* ---------- Cartão de filtros (coluna esquerda) ---------- */
 #estoque{padding-top:36px}
 .estoque-side{
-  position:sticky;top:200px;
+  position:sticky;top:16px;
   border:1.5px solid #111;border-radius:var(--raio);
   padding:20px;background:#fff;
   box-shadow:0 8px 24px rgba(0,0,0,.12);
-  max-height:calc(100vh - 220px);overflow-y:auto
+  max-height:calc(100vh - 32px);overflow-y:auto
 }
-@media(max-width:1000px){.estoque-side{top:150px;max-height:calc(100vh - 170px)}}
 @media(max-width:820px){.estoque-side{position:static;max-height:none;margin-bottom:24px}}
 .side-tit{font-size:.9rem;text-transform:uppercase;letter-spacing:.8px;
   color:var(--marca);margin-bottom:12px;font-weight:600}
@@ -275,6 +274,51 @@ footer a:hover{color:#fff}
 /* ============================================
    HOME
 ============================================ */
+/* Barra de categorias horizontal (abaixo do cabeçalho) */
+.cat-bar{background:#fff;border-bottom:1px solid var(--borda);
+  position:sticky;top:0;z-index:40}
+.cat-bar-in{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;padding:10px 0}
+.cat-bar-item{
+  padding:9px 16px;border-radius:8px;font-family:"Oswald",sans-serif;
+  text-transform:uppercase;letter-spacing:.4px;font-size:.9rem;font-weight:500;
+  color:var(--marca);transition:.15s;white-space:nowrap
+}
+.cat-bar-item:hover{background:var(--marca);color:#fff}
+@media(max-width:820px){
+  .cat-bar-in{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;
+    padding:10px 16px;gap:6px;-webkit-overflow-scrolling:touch}
+  .cat-bar-item{flex-shrink:0}
+}
+
+/* Grade de 3 carrosséis de destaque */
+.destaques-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media(max-width:860px){.destaques-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.destaques-grid{grid-template-columns:1fr}}
+.carrossel-vazio-msg{grid-column:1/-1;text-align:center;color:var(--cinza);
+  padding:50px 20px;border:2px dashed var(--borda);border-radius:var(--raio)}
+
+.mini-carrossel{position:relative;border:1px solid var(--borda);border-radius:var(--raio);
+  overflow:hidden;background:#fff;box-shadow:var(--sombra)}
+.mini-trilho{display:flex;transition:transform .55s cubic-bezier(.4,0,.2,1)}
+.mini-slide{min-width:100%;display:block;color:inherit}
+.mini-foto{aspect-ratio:4/3;background:var(--cinza-cl);position:relative;overflow:hidden}
+.mini-foto img{width:100%;height:100%;object-fit:cover}
+.mini-badge{position:absolute;top:12px;left:12px;background:var(--vermelho);color:#fff;
+  font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+  padding:4px 10px;border-radius:6px}
+.mini-info{padding:14px;display:flex;flex-direction:column;gap:4px}
+.mini-cat{font-size:.7rem;color:var(--vermelho);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.mini-tit{font-family:"Oswald",sans-serif;font-size:1.1rem;font-weight:600;line-height:1.2}
+.mini-sub{font-size:.85rem;color:var(--cinza)}
+.mini-preco{font-size:1.25rem;font-weight:800;color:var(--tinta);margin-top:4px}
+.mini-dots{display:flex;justify-content:center;gap:6px;padding:10px 0 12px}
+.mini-dots button{width:8px;height:8px;border-radius:50%;border:none;
+  background:var(--borda);cursor:pointer;padding:0;transition:.2s}
+.mini-dots button.on{background:var(--marca);width:20px;border-radius:4px}
+
+/* Hero da home (texto centralizado, sem carrossel ao lado) */
+.hero-home{padding:38px 0 40px;margin-bottom:8px}
+.hero-home .hero-texto{max-width:720px;margin:0 auto}
 
 /* ============================================
    PÁGINA DE ESTOQUE
