@@ -59,15 +59,28 @@ function vaiPara(i){
 function inicia(){ crTimer = setInterval(()=>vaiPara(crIndex+1), 5000); }
 function reinicia(){ clearInterval(crTimer); if(crTotal>1) inicia(); }
 
-// ===== Grade de categorias (levam ao estoque filtrado) =====
+// ===== Categorias na sidebar (links que levam ao estoque) =====
 function montaCategorias(){
-  const box = document.getElementById("cats-grid");
+  const box = document.getElementById("cats-links");
   if(!box) return;
-  box.innerHTML = C.CATEGORIAS.map(cat=>`
-    <a class="cat-card" href="estoque.html?cat=${encodeURIComponent(cat)}">
-      <span class="cat-nome">${cat}</span>
-      <span class="cat-seta">→</span>
-    </a>`).join("");
+  const links = ["Todos", ...C.CATEGORIAS];
+  box.innerHTML = links.map(cat=>{
+    const href = cat==="Todos" ? "estoque.html" : `estoque.html?cat=${encodeURIComponent(cat)}`;
+    return `<a class="chip" href="${href}">${cat}</a>`;
+  }).join("");
+}
+
+// ===== Busca na home leva ao estoque com o termo =====
+function ligaBusca(){
+  const txt = document.getElementById("busca-txt");
+  const btn = document.getElementById("busca-btn");
+  if(!btn) return;
+  const irParaEstoque = ()=>{
+    const q = txt ? txt.value.trim() : "";
+    location.href = q ? `estoque.html?q=${encodeURIComponent(q)}` : "estoque.html";
+  };
+  btn.addEventListener("click", irParaEstoque);
+  if(txt) txt.addEventListener("keydown", e=>{ if(e.key==="Enter") irParaEstoque(); });
 }
 
 // ===== Carrega destaques do Supabase =====
@@ -88,4 +101,5 @@ async function carrega(){
 preencheLoja();
 ligaMenu();
 montaCategorias();
+ligaBusca();
 carrega();

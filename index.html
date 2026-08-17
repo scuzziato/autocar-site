@@ -35,39 +35,48 @@
   </div>
 </header>
 
-<!-- HERO com carrossel de destaques -->
-<div class="hero hero-home">
-  <div class="container">
-    <div class="hero-texto">
-      <h1>O maior estoque de utilitários do Paraná</h1>
-      <p>Somos especializados em vans, micro-ônibus e furgões. Cada veículo é
-         avaliado antes de entrar no nosso estoque — você conhece toda a
-         procedência antes de fechar negócio, em Toledo/PR.</p>
-      <div class="hero-cta">
-        <a href="estoque.html" class="btn">Ver estoque completo</a>
-        <a class="btn sec" id="zap-hero" target="_blank" rel="noopener">Falar no WhatsApp</a>
+<!-- TOPO: categorias (esq) + banner/destaques (dir) -->
+<div class="topo-layout">
+  <div class="container topo-grid">
+
+    <!-- COLUNA ESQUERDA: categorias + busca -->
+    <aside class="estoque-side" id="filtros">
+      <h3 class="side-tit">Categorias</h3>
+      <div class="side-cats" id="cats-links"></div>
+      <div class="side-busca">
+        <h3 class="side-tit">Buscar no estoque</h3>
+        <input type="text" id="busca-txt" placeholder="Marca ou modelo…" autocomplete="off">
+        <button class="btn-buscar" id="busca-btn">Buscar</button>
+      </div>
+    </aside>
+
+    <!-- COLUNA DIREITA: hero azul + carrossel -->
+    <div class="topo-conteudo">
+      <div class="hero">
+        <div class="hero-texto">
+          <h1>O maior estoque de utilitários do Paraná</h1>
+          <p>Somos especializados em vans, micro-ônibus e furgões. Cada veículo é
+             avaliado antes de entrar no nosso estoque — você conhece toda a
+             procedência antes de fechar negócio, em Toledo/PR.</p>
+          <div class="hero-cta">
+            <a href="estoque.html" class="btn">Ver estoque completo</a>
+            <a class="btn sec" id="zap-hero" target="_blank" rel="noopener">Falar no WhatsApp</a>
+          </div>
+        </div>
+        <div class="carrossel-faixa">
+          <div class="carrossel" id="carrossel">
+            <div class="carrossel-vazio" id="carrossel-vazio">Carregando destaques…</div>
+            <div class="carrossel-trilho" id="carrossel-trilho"></div>
+            <button class="carrossel-seta esq oculto" id="cr-esq" aria-label="Anterior">‹</button>
+            <button class="carrossel-seta dir oculto" id="cr-dir" aria-label="Próximo">›</button>
+            <div class="carrossel-dots" id="carrossel-dots"></div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="carrossel-faixa">
-      <div class="carrossel" id="carrossel">
-        <div class="carrossel-vazio" id="carrossel-vazio">Carregando destaques…</div>
-        <div class="carrossel-trilho" id="carrossel-trilho"></div>
-        <button class="carrossel-seta esq oculto" id="cr-esq" aria-label="Anterior">‹</button>
-        <button class="carrossel-seta dir oculto" id="cr-dir" aria-label="Próximo">›</button>
-        <div class="carrossel-dots" id="carrossel-dots"></div>
-      </div>
-    </div>
+
   </div>
 </div>
-
-<!-- CATEGORIAS (levam ao estoque filtrado) -->
-<section id="categorias">
-  <div class="container">
-    <h2 class="sec-tit">Navegue por categoria</h2>
-    <p class="sec-sub">Escolha o tipo de veículo para ver todo o estoque disponível.</p>
-    <div class="cats-grid" id="cats-grid"></div>
-  </div>
-</section>
 
 <!-- SOBRE -->
 <section id="sobre" class="sobre">

@@ -6,9 +6,10 @@ let filtro = "Todos";
 let busca = "";
 let ordem = "recentes";
 
-// Lê ?cat= da URL para já abrir filtrado
+// Lê ?cat= e ?q= da URL para já abrir filtrado/buscado
 const params = new URLSearchParams(location.search);
 const catInicial = params.get("cat");
+const buscaInicial = params.get("q");
 
 // Filtro de categorias (sidebar) --------------------------
 function montaChips(){
@@ -107,6 +108,12 @@ preencheLoja();
 ligaMenu();
 // aplica categoria vinda da URL, se válida
 if(catInicial && C.CATEGORIAS.includes(catInicial)) filtro = catInicial;
+// aplica busca vinda da home, se houver
+if(buscaInicial){
+  busca = buscaInicial;
+  const campo = document.getElementById("busca-txt");
+  if(campo) campo.value = buscaInicial;
+}
 montaChips();
 atualizaTitulo();
 ligaControles();

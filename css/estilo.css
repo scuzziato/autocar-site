@@ -160,9 +160,9 @@ section{padding:44px 0}
   color:var(--marca);margin-bottom:12px;font-weight:600}
 .side-cats{display:flex;flex-direction:column;gap:4px;margin-bottom:22px}
 .chip{
-  text-align:left;padding:9px 14px;border:none;border-left:3px solid transparent;
+  display:block;text-align:left;padding:9px 14px;border:none;border-left:3px solid transparent;
   border-radius:8px;background:transparent;font-size:.95rem;cursor:pointer;
-  color:var(--tinta);transition:.15s;width:100%
+  color:var(--tinta);transition:.15s;width:100%;text-decoration:none
 }
 .chip:hover{background:var(--cinza-cl)}
 .chip.on{background:var(--marca);color:#fff;border-left-color:var(--vermelho);font-weight:600}
@@ -273,26 +273,8 @@ footer a:hover{color:#fff}
 .oculto{display:none!important}
 
 /* ============================================
-   HOME: hero centralizado + grade de categorias
+   HOME
 ============================================ */
-.hero-home{padding:38px 0 44px}
-.hero-home .container{position:relative;z-index:1}
-.hero-home .hero-texto{max-width:720px}
-.hero-home .carrossel{max-width:760px}
-
-/* Grade de categorias (cards que levam ao estoque) */
-.cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
-.cat-card{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px 20px;border:1px solid var(--borda);border-radius:12px;
-  background:#fff;box-shadow:var(--sombra);transition:.16s;
-  font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.5px;
-  font-weight:600;color:var(--marca)
-}
-.cat-card:hover{border-color:var(--marca);transform:translateY(-2px);
-  box-shadow:0 8px 22px rgba(0,0,0,.12)}
-.cat-card .cat-seta{color:var(--vermelho);font-size:1.2rem;transition:.16s}
-.cat-card:hover .cat-seta{transform:translateX(4px)}
 
 /* ============================================
    PÁGINA DE ESTOQUE
