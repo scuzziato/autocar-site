@@ -39,14 +39,19 @@ async function carrega(){
       <div class="galeria-main">
         ${fotos.length?`<img id="foto-main" src="${fotos[0]}" alt="${c.titulo}">`
           :`<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--cinza)">Sem fotos</div>`}
+        ${fotos.length>1?`
+          <button class="galeria-seta esq" id="g-esq" aria-label="Foto anterior">‹</button>
+          <button class="galeria-seta dir" id="g-dir" aria-label="Próxima foto">›</button>
+          <span class="galeria-contador" id="g-cont">1 / ${fotos.length}</span>
+        `:""}
       </div>
       ${fotos.length>1?`<div class="galeria-thumbs" id="thumbs">
-        ${fotos.map((f,i)=>`<img src="${f}" class="${i===0?"on":""}" data-src="${f}">`).join("")}
+        ${fotos.map((f,i)=>`<img src="${f}" class="${i===0?"on":""}" data-i="${i}">`).join("")}
       </div>`:""}
     </div>
-    <div>
-      <span class="card-cat">${(c.categorias&&c.categorias.length)?c.categorias.join(" · "):""}</span>
-      <h1 style="font-size:1.6rem;margin:6px 0">${c.titulo}</h1>
+    <div class="det-info">
+      <span class="det-cat">${(c.categorias&&c.categorias.length)?c.categorias.join(" · "):""}</span>
+      <h1 class="det-titulo">${c.titulo}</h1>
       ${c.vendido?`<span class="tag-vendido" style="position:static;display:inline-block">Vendido</span>`:""}
       <div class="det-preco">${brl(c.preco)}</div>
 
@@ -62,26 +67,44 @@ async function carrega(){
       </div>
 
       ${c.opcionais&&c.opcionais.length?`
-        <b style="font-size:.9rem">Opcionais</b>
+        <b style="font-size:.9rem;display:block;margin-bottom:6px">Opcionais</b>
         <div class="opcionais">${c.opcionais.map(o=>`<span>${o}</span>`).join("")}</div>`:""}
 
-      ${c.descricao?`<p style="margin:14px 0;white-space:pre-line">${c.descricao}</p>`:""}
+      ${c.descricao?`<p class="det-desc">${c.descricao}</p>`:""}
 
       <a class="btn-zap" href="${zap}" target="_blank" rel="noopener"
-         style="display:inline-flex;margin-top:12px;padding:13px 24px;font-size:1rem">
+         style="display:inline-flex;margin-top:16px;padding:13px 24px;font-size:1rem">
          Tenho interesse — falar no WhatsApp</a>
     </div>
   </div>`;
 
-  // Galeria: troca foto principal ao clicar na miniatura
-  const thumbs = document.getElementById("thumbs");
-  if(thumbs){
-    thumbs.querySelectorAll("img").forEach(t=>{
-      t.onclick = ()=>{
-        document.getElementById("foto-main").src = t.dataset.src;
-        thumbs.querySelectorAll("img").forEach(x=>x.classList.remove("on"));
-        t.classList.add("on");
-      };
+  // ===== Galeria com setas e miniaturas =====
+  if(fotos.length){
+    let atual = 0;
+    const main = document.getElementById("foto-main");
+    const cont = document.getElementById("g-cont");
+    const thumbs = document.getElementById("thumbs");
+    const mostra = (i)=>{
+      atual = (i+fotos.length)%fotos.length;
+      main.src = fotos[atual];
+      if(cont) cont.textContent = `${atual+1} / ${fotos.length}`;
+      if(thumbs){
+        thumbs.querySelectorAll("img").forEach((x,xi)=>x.classList.toggle("on", xi===atual));
+      }
+    };
+    const esq = document.getElementById("g-esq");
+    const dir = document.getElementById("g-dir");
+    if(esq) esq.onclick = ()=> mostra(atual-1);
+    if(dir) dir.onclick = ()=> mostra(atual+1);
+    if(thumbs){
+      thumbs.querySelectorAll("img").forEach(t=>{
+        t.onclick = ()=> mostra(+t.dataset.i);
+      });
+    }
+    // navegação por teclado (setas do teclado)
+    document.addEventListener("keydown", e=>{
+      if(e.key==="ArrowLeft") mostra(atual-1);
+      if(e.key==="ArrowRight") mostra(atual+1);
     });
   }
 }

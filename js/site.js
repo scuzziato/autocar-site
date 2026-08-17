@@ -32,7 +32,7 @@ function slideMini(c){
   </a>`;
 }
 
-// ===== Monta 3 carrosséis, distribuindo os destaques entre eles =====
+// ===== Monta 3 carrosséis, um por categoria (só destaques) =====
 function montaDestaques(destaques){
   const grid  = document.getElementById("destaques-grid");
   const vazio = document.getElementById("destaques-vazio");
@@ -43,22 +43,47 @@ function montaDestaques(destaques){
   }
   if(vazio) vazio.remove();
 
-  // Distribui os destaques em até 3 grupos (colunas)
-  const NCOLS = Math.min(3, destaques.length);
-  const grupos = Array.from({length:NCOLS}, ()=>[]);
-  destaques.forEach((c,i)=> grupos[i % NCOLS].push(c));
+  // Agrupa por categoria: cada veículo entra na sua 1ª categoria.
+  // Segue a ordem de C.CATEGORIAS e pega as que têm destaques.
+  const porCategoria = {};
+  destaques.forEach(c=>{
+    const cats = (c.categorias&&c.categorias.length)?c.categorias:["Outros"];
+    cats.forEach(cat=>{
+      if(!porCategoria[cat]) porCategoria[cat] = [];
+      // evita repetir o mesmo carro na mesma categoria
+      if(!porCategoria[cat].some(x=>x.id===c.id)) porCategoria[cat].push(c);
+    });
+  });
 
-  grid.innerHTML = grupos.map((g,gi)=>`
+  // Ordena as categorias pela ordem definida no config, só as que têm veículos
+  const catsComDestaque = C.CATEGORIAS.filter(cat=>porCategoria[cat] && porCategoria[cat].length);
+  // fallback: categorias fora da lista (ex: "Outros")
+  Object.keys(porCategoria).forEach(cat=>{
+    if(!catsComDestaque.includes(cat)) catsComDestaque.push(cat);
+  });
+
+  if(!catsComDestaque.length){
+    grid.innerHTML = `<div class="carrossel-vazio-msg">Em breve, veículos em destaque.</div>`;
+    return;
+  }
+
+  grid.innerHTML = catsComDestaque.map((cat,gi)=>{
+    const lista = porCategoria[cat];
+    const href = `estoque.html?cat=${encodeURIComponent(cat)}`;
+    return `
     <div class="mini-carrossel" data-g="${gi}">
-      <div class="mini-trilho">${g.map(slideMini).join("")}</div>
-      ${g.length>1?`<div class="mini-dots">${g.map((_,i)=>`<button data-i="${i}" class="${i===0?"on":""}"></button>`).join("")}</div>`:""}
-    </div>`).join("");
+      <div class="mini-cab"><span class="mini-cab-nome">${cat}</span>
+        <a class="mini-cab-link" href="${href}">ver todos</a></div>
+      <div class="mini-trilho">${lista.map(slideMini).join("")}</div>
+      ${lista.length>1?`<div class="mini-dots">${lista.map((_,i)=>`<button data-i="${i}" class="${i===0?"on":""}"></button>`).join("")}</div>`:""}
+    </div>`;
+  }).join("");
 
   // Ativa rotação independente de cada coluna
   grid.querySelectorAll(".mini-carrossel").forEach((car,idx)=>{
     const trilho = car.querySelector(".mini-trilho");
     const dots = car.querySelectorAll(".mini-dots button");
-    const total = grupos[idx].length;
+    const total = catsComDestaque[idx] ? porCategoria[catsComDestaque[idx]].length : 0;
     if(total<2) return;
     let pos = 0;
     const ir = (i)=>{
@@ -68,7 +93,6 @@ function montaDestaques(destaques){
     };
     dots.forEach(d=> d.addEventListener("click", ()=>{ ir(+d.dataset.i); reinicia(); }));
     let timer;
-    // desencontra o início de cada coluna para não trocarem todas juntas
     const inicia = ()=>{ timer = setInterval(()=>ir(pos+1), 4000); };
     const reinicia = ()=>{ clearInterval(timer); inicia(); };
     setTimeout(inicia, idx*1300);
