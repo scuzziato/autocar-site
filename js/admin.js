@@ -128,14 +128,47 @@ $("f-fotos").onchange = (e)=>{
 function renderThumbs(){
   $("thumbs-up").innerHTML = fotosAtuais.map((f,i)=>{
     const src = f.tipo==="url"?f.valor:f.preview;
-    return `<div class="t">
-      <img src="${src}">
-      <button class="rm" onclick="tiraFoto(${i})">×</button>
-      ${i===0?`<div style="text-align:center;font-size:.68rem;color:var(--marca);font-weight:700">capa</div>`:``}
+    const total = fotosAtuais.length;
+    return `<div class="t" draggable="true" data-i="${i}">
+      <img src="${src}" draggable="false">
+      <button class="rm" onclick="tiraFoto(${i})" title="Remover">×</button>
+      <div class="t-mover">
+        <button onclick="moveFoto(${i},-1)" ${i===0?"disabled":""} title="Mover para trás">‹</button>
+        <button onclick="moveFoto(${i},1)" ${i===total-1?"disabled":""} title="Mover para frente">›</button>
+      </div>
+      ${i===0?`<div class="t-capa">capa</div>`:``}
     </div>`;
   }).join("");
+  ligaArrasto();
 }
-window.tiraFoto = (i)=>{ fotosAtuais.splice(i,1); renderThumbs(); };
+
+// Mover foto por botão (‹ ›)
+window.moveFoto = (i, dir)=>{
+  const j = i + dir;
+  if(j<0 || j>=fotosAtuais.length) return;
+  [fotosAtuais[i], fotosAtuais[j]] = [fotosAtuais[j], fotosAtuais[i]];
+  renderThumbs();
+};
+
+// Arrastar-e-soltar para reordenar
+let arrastando = null;
+function ligaArrasto(){
+  const box = $("thumbs-up");
+  box.querySelectorAll(".t").forEach(el=>{
+    el.addEventListener("dragstart", ()=>{ arrastando = +el.dataset.i; el.classList.add("arrastando"); });
+    el.addEventListener("dragend", ()=>{ el.classList.remove("arrastando"); });
+    el.addEventListener("dragover", (e)=> e.preventDefault());
+    el.addEventListener("drop", (e)=>{
+      e.preventDefault();
+      const destino = +el.dataset.i;
+      if(arrastando===null || arrastando===destino) return;
+      const item = fotosAtuais.splice(arrastando,1)[0];
+      fotosAtuais.splice(destino,0,item);
+      arrastando = null;
+      renderThumbs();
+    });
+  });
+}
 
 // ---------- EDITAR ----------
 window.editar = async (id)=>{
@@ -155,11 +188,35 @@ window.editar = async (id)=>{
 };
 
 // ---------- REMOVER ----------
+// Extrai o nome do arquivo dentro do bucket a partir da URL pública
+function nomeDoArquivo(url){
+  if(!url) return null;
+  // URL pública: .../storage/v1/object/public/fotos-carros/NOME.jpg
+  const marca = `/${BUCKET}/`;
+  const i = url.indexOf(marca);
+  if(i === -1) return null;
+  return decodeURIComponent(url.slice(i + marca.length).split("?")[0]);
+}
+
 window.remover = async (id)=>{
   if(!confirm("Excluir este veículo? Esta ação não pode ser desfeita.")) return;
+
+  // 1) Busca o carro para saber quais fotos apagar
+  const { data:carro } = await sb.from("carros").select("fotos").eq("id",id).single();
+
+  // 2) Apaga as fotos do Storage
+  if(carro && carro.fotos && carro.fotos.length){
+    const nomes = carro.fotos.map(nomeDoArquivo).filter(Boolean);
+    if(nomes.length){
+      const { error:stErr } = await sb.storage.from(BUCKET).remove(nomes);
+      if(stErr) console.warn("Aviso ao apagar fotos do storage:", stErr.message);
+    }
+  }
+
+  // 3) Apaga o registro do banco
   const { error } = await sb.from("carros").delete().eq("id",id);
   if(error){ msg($("msg-painel"),"Erro ao excluir: "+error.message,"err"); return; }
-  msg($("msg-painel"),"Veículo excluído.","ok"); listar();
+  msg($("msg-painel"),"Veículo e fotos excluídos.","ok"); listar();
 };
 
 // ---------- SALVAR ----------
